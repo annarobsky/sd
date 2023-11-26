@@ -41,6 +41,7 @@ CONTROLNET_MODELS=(
     "https://huggingface.co/lllyasviel/sd_control_collection/blob/main/ip-adapter_sd15.pth"
     "https://huggingface.co/lllyasviel/sd_control_collection/blob/main/ip-adapter_sd15_plus.pth"
     "https://huggingface.co/CiaraRowles/TemporalNet/blob/main/diff_control_sd15_temporalnet_fp16.safetensors"
+    "https://huggingface.co/guoyww/animatediff/blob/main/mm_sd_v15_v2.ckpt"
 )
 
 
