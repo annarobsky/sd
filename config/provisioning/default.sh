@@ -16,6 +16,7 @@ EXTENSIONS=(
 CHECKPOINT_MODELS=(
     "https://civitai.com/api/download/models/41291?type=Model&format=SafeTensor&size=pruned&fp=fp16"
     "https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.ckpt"
+    "https://civitai.com/api/download/models/234105?type=Model&format=SafeTensor&size=pruned&fp=fp16"
 )
 
 LORA_MODELS=(
