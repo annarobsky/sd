@@ -38,6 +38,8 @@ CONTROLNET_MODELS=(
     "https://huggingface.co/lllyasviel/ControlNet-v1-1/blob/main/control_v11p_sd15_openpose.pth"
     "https://huggingface.co/lllyasviel/ControlNet-v1-1/blob/main/control_v11f1e_sd15_tile.pth"
     "https://huggingface.co/lllyasviel/ControlNet-v1-1/blob/main/control_v11p_sd15_softedge.pth"
+    "https://huggingface.co/lllyasviel/sd_control_collection/blob/main/ip-adapter_sd15.pth"
+    "https://huggingface.co/lllyasviel/sd_control_collection/blob/main/ip-adapter_sd15_plus.pth"
     "https://huggingface.co/CiaraRowles/TemporalNet/blob/main/diff_control_sd15_temporalnet_fp16.safetensors"
 )
 
