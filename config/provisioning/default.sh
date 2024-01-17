@@ -1,16 +1,12 @@
 #!/bin/false
+
 # This file will be sourced in init.sh
-# Namespace functions with provisioning_
 
-# https://raw.githubusercontent.com/ai-dock/stable-diffusion-webui/main/config/provisioning/default.sh
+# https://raw.githubusercontent.com/ai-dock/comfyui/main/config/provisioning/default.sh
 
-### Edit the following arrays to suit your workflow
 
-DISK_GB_REQUIRED=30
-
-EXTENSIONS=(
-    "https://github.com/Mikubill/sd-webui-controlnet"
-    "https://github.com/deforum-art/sd-webui-deforum"
+NODES=(
+    "https://github.com/ltdrdata/ComfyUI-Manager"
 )
 
 CHECKPOINT_MODELS=(
@@ -42,6 +38,8 @@ CONTROLNET_MODELS=(
     "https://huggingface.co/lllyasviel/sd_control_collection/blob/main/ip-adapter_sd15_plus.pth"
     "https://huggingface.co/CiaraRowles/TemporalNet/blob/main/diff_control_sd15_temporalnet_fp16.safetensors"
     "https://huggingface.co/guoyww/animatediff/blob/main/mm_sd_v15_v2.ckpt"
+    "https://huggingface.co/webui/ControlNet-modules-safetensors/resolve/main/control_seg-fp16.safetensors"
+
 )
 
 
@@ -52,43 +50,43 @@ function provisioning_start() {
     DISK_GB_USED=$(($(df --output=used -m "${WORKSPACE}" | tail -n1) / 1000))
     DISK_GB_ALLOCATED=$(($DISK_GB_AVAILABLE + $DISK_GB_USED))
     provisioning_print_header
-    provisioning_get_extensions
+    provisioning_get_nodes
     provisioning_get_models \
-        "/opt/stable-diffusion-webui/models/Stable-diffusion" \
+        "${WORKSPACE}/storage/stable_diffusion/models/ckpt" \
         "${CHECKPOINT_MODELS[@]}"
     provisioning_get_models \
-        "/opt/stable-diffusion-webui/models/Lora" \
+        "${WORKSPACE}/storage/stable_diffusion/models/lora" \
         "${LORA_MODELS[@]}"
     provisioning_get_models \
-        "/opt/stable-diffusion-webui/extensions/sd-webui-controlnet/models" \
+        "${WORKSPACE}/storage/stable_diffusion/models/controlnet" \
         "${CONTROLNET_MODELS[@]}"
     provisioning_get_models \
-        "/opt/stable-diffusion-webui/models/VAE" \
+        "${WORKSPACE}/storage/stable_diffusion/models/vae" \
         "${VAE_MODELS[@]}"
     provisioning_get_models \
-        "/opt/stable-diffusion-webui/models/ESRGAN" \
+        "${WORKSPACE}/storage/stable_diffusion/models/esrgan" \
         "${ESRGAN_MODELS[@]}"
     provisioning_print_end
 }
 
-function provisioning_get_extensions() {
-    for repo in "${EXTENSIONS[@]}"; do
+function provisioning_get_nodes() {
+    for repo in "${NODES[@]}"; do
         dir="${repo##*/}"
-        path="/opt/stable-diffusion-webui/extensions/${dir}"
+        path="/opt/ComfyUI/custom_nodes/${dir}"
         requirements="${path}/requirements.txt"
         if [[ -d $path ]]; then
             if [[ ${AUTO_UPDATE,,} != "false" ]]; then
-                printf "Updating extension: %s...\n" "${repo}"
+                printf "Updating node: %s...\n" "${repo}"
                 ( cd "$path" && git pull )
                 if [[ -e $requirements ]]; then
-                    micromamba -n webui run ${PIP_INSTALL} -r "$requirements"
+                    micromamba -n comfyui run ${PIP_INSTALL} -r "$requirements"
                 fi
             fi
         else
-            printf "Downloading extension: %s...\n" "${repo}"
-            git clone "${repo}" "${path}"
+            printf "Downloading node: %s...\n" "${repo}"
+            git clone "${repo}" "${path}" --recursive
             if [[ -e $requirements ]]; then
-                micromamba -n webui run ${PIP_INSTALL} -r "${requirements}"
+                micromamba -n comfyui run ${PIP_INSTALL} -r "${requirements}"
             fi
         fi
     done
